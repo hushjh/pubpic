@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <style>
+    	body{
+    		
+    	}
+    	
+    	.form_position{
+    		top:70px;
+    	}
+    	.input_ronley{
+    		cursor:not-allowed; 
+    	}
+    </style>
+</head>
+<body>
+	
+	<div class="aui-form form_position" >
+			<div class="aui-input-row">
+        		<label class="aui-input-addon" >公司编号</label>
+        		<input type="text" class="aui-input " readonly="readonly" id="comId"/>
+    		</div>
+			<div class="aui-input-row">
+        		<label class="aui-input-addon" >公司名称</label>
+        		<input type="text" class="aui-input "  id="comName"/>
+    		</div>
+    		<div class="aui-input-row">
+        		<label class="aui-input-addon">公司联系人</label>
+        		<input type="text" class="aui-input" placeholder="公司联系人" id="comLinker"/>
+    		</div>
+    		<div class="aui-input-row">
+        		<label class="aui-input-addon">联系电话</label>
+        		<input type="text" class="aui-input" placeholder="联系电话" id="tel"/>
+    		</div>
+    		<div class="aui-input-row">
+        		<label class="aui-input-addon">线路和价格</label>
+        		<input type="text" class="aui-input" placeholder="线路和价格" id="linePrice"/>
+    		</div>
+    		<div class="aui-input-row">
+        		<label class="aui-input-addon">公司位置</label>
+        		<input type="text" class="aui-input" readonly="readonly" id="address"/>
+    		</div>
+    		<div class="aui-input-row">
+        		<label class="aui-input-addon">采集时间</label>
+        		<input type="text" class="aui-input" readonly="readonly" id="createAt"/>
+    		</div>
+    		
+    		
+    </div>	
+    <div class="aui-content">
+			<ul class="aui-list-view aui-grid-view"  id="imgslist">
+				<li class="aui-list-view-cell aui-img aui-col-xs-4" id="addpic">
+					<img class="aui-img-object" src="../image/studio.png" id="imgActSheet">
+				</li>
+			</ul>
+	</div>
+    <div class="aui-form form_position" >	
+			<div class="aui-input-row">
+				<textarea name="comment" class="aui-input"  id="comment" placeholder="总得说点什么吧"></textarea>
+			</div>
+	</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/comDetail_win.js"></script>
+<script type="text/javascript">
+	
+</script>
+</html>

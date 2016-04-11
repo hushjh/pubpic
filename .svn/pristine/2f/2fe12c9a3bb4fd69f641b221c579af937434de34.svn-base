@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>图片批量上传</title>
+		<link rel="stylesheet" type="text/css" href="../css/api.css" />
+		<link rel="stylesheet" type="text/css" href="../css/aui.css" />
+		<style type="text/css">
+			.aui-input-row {
+				width: 100%;
+			}
+			#content {
+				height: 150px;
+			}
+			.aui-form {
+				margin-bottom: 10px;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<header class="aui-bar aui-bar-nav aui-bar-dark" id="aui-header" style="padding-top:25px;">
+			<a class="aui-pull-left">  <span class="aui-iconfont aui-icon-left" id="back"></span></a>
+			<div class="aui-title">
+				采集信息
+			</div>
+			<a class="aui-pull-right" id="save">保存 </a>
+		</header>
+	
+		<div class="aui-form">
+			<div class="aui-input-row">
+        		<label class="aui-input-addon" id="getComId">取号</label>
+        		<input type="text" class="aui-input" placeholder="点取号" id="comId"/>
+    		</div>
+    		<div class="aui-input-row">
+        		<label class="aui-input-addon">公司名称</label>
+        		<input type="text" class="aui-input" placeholder="采集的公司名称" id="comName"/>
+    		</div>
+			
+		</div>
+		<div class="aui-content">
+			<ul class="aui-list-view aui-grid-view"  id="imgslist">
+				<li class="aui-list-view-cell aui-img aui-col-xs-4" id="addpic">
+					<img class="aui-img-object" src="../image/studio.png" id="imgActSheet">
+				</li>
+			</ul>
+		</div>
+		<div class="aui-content">
+			<ul class="aui-list-view">
+				<li class="aui-list-view-cell" data-win="list_arrow">
+					我的位置<font id="city" style="display: none"></font>
+					<font class="ll">正在定位中...</font>
+				</li>
+				<li class="aui-list-view-cell" data-win="list_arrow">
+					<font class="po">正在定位中...</font>
+				</li>
+				<li class="aui-list-view-cell" data-win="list_arrow">
+					<!--<button class="aui-btn aui-btn-warning">
+						显示
+					</button>
+					<button class="aui-btn aui-btn-danger">
+						隐藏
+					</button>-->
+					<font >日期</font>
+					<font class="dt"></font>
+				
+				</li>
+			</ul>
+		</div>
+		<div class="aui-input-row">
+				<textarea name="content" class="aui-input" id="content" placeholder="总得说点什么吧"></textarea>
+			</div>
+		
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/pubpic_win.js"></script>
+	<script type="text/javascript" src="../script/hammer.min.js"></script>
+	<script type="text/javascript">
+		
+	</script>
+		
+</html>

@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>图片批量上传</title>
+		<link rel="stylesheet" type="text/css" href="./css/api.css" />
+		<link rel="stylesheet" type="text/css" href="./css/aui-win.css" />
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		
+	</body>
+	<script type="text/javascript" src="./script/api.js"></script>
+	<script type="text/javascript" src="./script/index.js"></script>
+	<script type="text/javascript">
+		// 解决状态栏重合，并优化fixStatusBar代码,Android4.4版本以上添加25px
+		
+		
+	</script>
+</html>

@@ -1,0 +1,95 @@
+
+apiready = function(){
+	
+	UIScrollPicture = api.require('UIScrollPicture');
+	
+	keyBack();
+	$("#back").click(back);	
+	paths=api.pageParam.name;
+	//alert("api.pageParam:"+JSON.stringify(paths));
+	scrollPic();
+};
+
+function keyBack() {
+	//alert("keyBcak  function");
+	api.addEventListener({
+		name : 'keyback'
+	}, function(ret, err) {
+		//alert("aip.openWin");
+		//api.closeWin();
+		api.openWin({
+		name : 'main_win',
+		url : 'main_win.html',
+		reload: true,
+		pageParam : {
+			name : 'test'
+		}
+	});
+	});
+	
+}
+
+
+
+function back() {
+
+	api.openWin({
+		name : 'main_win',
+		url : 'main_win.html',
+		reload : true,
+		pageParam : {
+			name : 'test'
+		}
+	});
+
+}
+
+
+
+function scrollPic() {
+	//var urlList=[];
+	//var paths=new Array();
+	//for(var i=0;i<urlList.length;i++){
+		//paths.push(urlList[i]);
+	//}
+	//alert("paths:"+paths);
+	UIScrollPicture.open({
+		rect : {
+			x : 0,
+			y : 45,
+			w : api.winWidth,
+			h : 300
+		},
+		//data : {
+			//paths : ['widget://res/img/ic/slide1.jpg', 'widget://res/img/ic/slide2.jpg', 'widget://res/img/ic/slide5.jpg', 'widget://res/img/ic/slide3.jpg', 'widget://res/img/ic/slide4.jpg'],
+			//captions : ['title1', 'title2', 'title3', 'title4', 'title5']
+		//},
+		data:{
+			paths:paths,
+			//captions:['title1','title2']
+		},
+		styles : {
+			//caption : {
+				
+			//},
+			indicator : {
+				align : 'center',
+				color : '#FFFFFF',
+				activeColor : '#DA70D6'
+			}
+		},
+		placeholderImg : 'widget://res/slide1.jpg',
+		contentMode : 'scaleToFill',
+		interval : 3,
+		loop : true,
+		fixedOn : api.frameName,
+		fixed : false
+	}, function(ret, err) {
+		if (ret) {
+			//alert(JSON.stringify(ret));
+		} else {
+			alert(JSON.stringify(err));
+		}
+	});
+
+}

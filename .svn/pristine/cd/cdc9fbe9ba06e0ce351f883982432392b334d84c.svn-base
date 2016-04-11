@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+    	body{
+    		
+    	}
+    </style>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript">
+	apiready = function(){
+		map= api.require('bMap');
+		open();
+		alert("bmap_frm.html");
+	};
+	
+	function open(){
+			map.open({
+			rect: {
+				x: 0,
+				y: 0,
+				w: 'auto',
+				h: api.frameHeight
+				},
+		/*center: {
+		lon: lon,
+		lat: lat
+		},*/
+			zoomLevel: 17,
+			showUserLocation: false,
+			fixedOn: '',
+			fixed: true
+			}, 
+			function(ret){
+				if(ret){
+		//获取位置坐标
+				//getLocation();
+				}
+			}
+			);
+		}
+</script>
+</html>

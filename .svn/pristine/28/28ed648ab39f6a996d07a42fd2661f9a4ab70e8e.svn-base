@@ -1,0 +1,89 @@
+apiready = function() {
+	actionButton = api.require('actionButton');
+	
+	actBtnOpen();
+	// 操作功能列表页面
+	api.openFrame({
+		name : 'linker',
+		url : './html/linker.html',
+		rect : {
+			x : 0,
+			y : headerPos.h,
+			w : api.winWidth,
+			h : api.winHeight - headerPos.h
+		},
+		pageParam : {},
+		bounces : false,
+		vScrollBarEnabled : false,
+		hScrollBarEnabled : false
+	});
+
+}; 
+
+
+function actBtnOpen() {
+	actionButton.open({
+		items : [{
+			bgColor : '#00CED1',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon1.png'
+		}, {
+			bgColor : '#FFC0CB',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon2.png'
+		}, {
+			bgColor : '#DB7093',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon3.png'
+		}, {
+			bgColor : '#FF00FF',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon4.png'
+		}, {
+			bgColor : '#A52A2A',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon5.png'
+		}, {
+			bgColor : '#A0522D',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon6.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}],
+		topHeight : 200,
+		pageControl : {
+			activeColor : '#778899',
+			inactiveColor : '#DDA0DD'
+		}
+	}, function(ret, err) {
+		api.alert({
+			msg : ret.index
+		});
+	});
+}

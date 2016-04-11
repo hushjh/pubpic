@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <style>
+    	body{
+    		
+    	}
+    </style>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+	apiready = function(){
+		actionButton = api.require('actionButton');
+		openActBtn();
+	};
+
+		function openActBtn() {
+			actionButton.open({
+				items : [{
+					bgColor : '#00CED1',
+					title : '标题一'
+				}, {
+					bgColor : '#00CED1',
+					title : '标题三'
+				}],
+				topHeight : 200,
+				pageControl : {
+					activeColor : '#778899',
+					inactiveColor : '#DDA0DD'
+				},
+				fixedOn : api.actionbtn_main_frm
+			}, function(ret, err) {
+				if (ret) {
+					alert(JSON.stringify(ret));
+				} else {
+					alert(JSON.stringify(err));
+				}
+			});
+		}
+</script>
+</html>

@@ -1,0 +1,494 @@
+
+var urlList=[];
+var currentIndex=0;
+apiready = function(){
+		var arcProgress = api.require('arcProgress');
+		imageBrowser=api.require('imageBrowser');
+		UIListView = api.require('UIListView');
+		db = api.require('db');
+		comListShow();
+		keyBack();
+		getComData();
+		//$("#back").click(back);
+		document.getElementById('back').onclick=back;
+		openOrcp();
+	};
+	
+function keyBack() {
+	//alert("keyBcak  function");
+	api.addEventListener({
+		name : 'keyback'
+	}, function(ret, err) {
+		//alert("aip.openWin");
+		//api.closeWin();
+		api.openWin({
+		name : 'main_win',
+		url : 'main_win.html',
+		reload: true,
+		pageParam : {
+			name : 'test'
+		}
+	});
+	});
+	
+}
+
+function back() {
+
+	api.openWin({
+		name : 'main_win',
+		url : 'main_win.html',
+		reload : true,
+		pageParam : {
+			name : 'test'
+		}
+	});
+
+}
+ 
+
+function openOrcp() {
+	obj.open({
+		type : 'annular',
+		centerX : 100,
+		centerY : 100,
+		radius : 60,
+		bgColor : '#c0c0c0',
+		pgColor : '#228b2',
+		loopWidth : 3
+	}, function(ret, err) {
+
+	});
+}
+
+
+function openImageBrowser(imgs) {
+	imageBrowser.openImages({
+		imageUrls : imgs,
+		showList : false,
+		activeIndex : 0
+	});
+}
+
+
+function getPicData(comId) {
+	//alert("comId:"+comId);
+	var sql = "select * from pic where comId='"+comId+"'";
+	db.selectSql({
+		name : 'app',
+		sql : sql
+	}, function(ret, err) {
+		//alert(JSON.stringify(ret));
+		var rdata = ret.data;
+		urlList=[];
+		//alert("pic:" + rdata.length + ",rdata:" + rdata[0].url);
+		for (var i = 0; i < rdata.length; i++) {
+			//insertToList(rdata[i]);
+			//var url=rdata[i].url;
+			//alert("url"+url);
+			urlList.push(rdata[i].url);
+			url='http://192.168.2.100:8086/ajax/recPic.ashx';
+			
+			uploadFile(url, urlList[i], function(serverImg) {
+            //alert("上传成功后服务器返回的地址：" + serverImg);
+            	upLoadPicInfo(comId,serverImg);
+           });
+		}
+		//openImageBrowser(urlList);
+		//url='http://192.168.2.103:8086/ajax/recPic.ashx';
+		//url='http://192.168.2.103:8086/ajax/test.ashx';
+		//uploadFile(url, urlList, function(serverImg) {
+            //alert("上传成功后服务器返回的地址：" + serverImg);
+           //});
+	});
+	
+	upLoadCom(comId);
+}
+
+function upLoadPicInfo(comId,serverImg){
+	//alert("upLoadPicInfo comId:"+comId);
+	var sql = "select * from pic where comId='"+comId+"'";
+	db.selectSql({
+		name : 'app',
+		sql : sql
+	}, function(ret, err) {
+		
+		var comId=ret.data[0].comId;
+		var comment=ret.data[0].comment;
+		var picName=ret.data[0].picName;
+		var picurl=serverImg;
+		var createAt=ret.data[0].createAt;
+		
+		//alert("upLoadPicInfo  ret.data[0]:"+ret.data[0].comId);
+		//alert
+		var upurl='http://192.168.2.100:8086/ajax/recPicInfo.ashx';
+			api.ajax({
+				url : upurl,
+				method : 'post',
+				timeout : 30,
+				dataType : 'json',
+				returnAll : false,
+				data : {
+					values: { 
+            			comId: comId,
+            			comment: comment,
+            			picName: picName,
+            			picurl: picurl,
+            			createAt: createAt,           			
+        			}
+					//files : {
+						//file : data
+					//}
+				}
+			}, function(ret, err) {
+				if(ret.status==1){
+					alert("图片信息上传成功");
+				}else{
+					alert("图片信息上传ret.status"+ret.status);
+				}
+				
+			});	
+	});
+}
+
+function upLoadCom(comId){
+	//alert("uploadCom  comId:"+comId);
+	var sql = "select * from company where comId='"+comId+"'";
+	db.selectSql({
+		name : 'app',
+		sql : sql
+	}, function(ret, err) {
+		
+		var comId=ret.data[0].comId;
+		var comName=ret.data[0].comName;
+		var address=ret.data[0].address;
+		var city=ret.data[0].address;
+		//alert("upLoadCom  comName:"+comName);
+		var upurl='http://192.168.2.100:8086/ajax/recCom.ashx';
+			api.ajax({
+				url : upurl,
+				method : 'post',
+				timeout : 30,
+				dataType : 'json',
+				returnAll : false,
+				data : {
+					
+					values: { 
+            			comId: comId,
+            			comName: comName,
+            			address: address,         			
+        			}
+					//files : {
+						//file : data
+					//}
+				}
+			}, function(ret, err) {
+				if(ret.status==1){
+					alert("公司信息上传成功");
+					upDone();					
+				
+				}
+						
+				
+			});	
+	});
+}
+
+
+function upDone() {
+	UIListView.setSwipeBtns({
+		index : currentIndex,
+		btns : [{
+			bgColor : '#388e8e',
+			activeBgColor : '',
+			width : 70,
+			title : '详情',
+			titleSize : 12,
+			titleColor : '#fff',
+			icon : '',
+			iconWidth : 20
+		},{
+			bgColor : '#388e8e',
+			activeBgColor : '',
+			width : 70,
+			title : '已上传',
+			titleSize : 12,
+			titleColor : '#fff',
+			icon : '',
+			iconWidth : 20
+		}]
+	}, function(ret, err) {
+		if (ret) {
+			//alert(JSON.stringify(ret));
+		} else {
+			alert(JSON.stringify(err));
+		}
+	});
+}
+
+
+
+function picScan(num) {
+	currentIndex=num;
+	UIListView.getDataByIndex({
+		index : num
+	}, function(ret, err) {
+		if (ret) {
+			//ret.data[0]
+			var comId=ret.data.icon;
+			getPicData(comId);
+			//alert(JSON.stringify(ret.data.icon));
+		} else {
+			alert(JSON.stringify(err));
+		}
+	});
+}
+
+function getComData() {
+	db.openDatabase({
+		name : 'app'
+	}, function(ret, err) {
+		//coding...
+		if (ret.status) {
+			var sql = "select * from company";
+			db.selectSql({
+				name : 'app',
+				sql : sql
+			}, function(ret, err) {
+				var rdata = ret.data;
+				//alert("company:" + rdata.length + ",comId:" + rdata[0].comId);
+				for (var i = 0; i < rdata.length; i++) {
+					insertToList(rdata[i]);
+				}
+
+			});
+		}
+	});
+
+}
+
+function insertToList(rdata) {
+	UIListView.insertItem({
+		//index : 2,
+		data : {
+			imgPath : 'http://d.hiphotos.baidu.com/image/pic/item/4d086e061d950a7b29a788c209d162d9f2d3c922.jpg',
+			title : rdata.comName,
+			subTitle : rdata.address,
+			remark : rdata.city,
+			icon:rdata.comId,
+			rightBtns : [{
+				title : '详情'
+			}, {
+				title : '上传'
+			}]
+		}
+
+	}, function(ret, err) {
+		if (ret) {
+			//alert(JSON.stringify(ret));
+		} else {
+			alert(JSON.stringify(err));
+		}
+	});
+}
+
+function deleteFromList(index) {
+	UIListView.deleteItem({
+		index : index
+	}, function(ret, err) {
+		if (ret) {
+			alert(JSON.stringify(ret));
+		} else {
+			alert(JSON.stringify(err));
+		}
+	});
+}
+
+
+	// 上传图片
+	// url：上传的url地址
+	// data：上传的文件
+	// callback：上传成功返回地址
+//http://192.168.2.103:8086/img/me.jpg
+
+function uploadFile(url, data, callback) {
+
+		//alert("url:" + url + ";data:" + data);
+		api.ajax({
+			url : url,
+			method : 'post',
+			timeout : 30,
+			dataType : 'json',
+			returnAll : false,
+			data : {
+				//values: {
+				//name: 'haha'
+				//}
+				files : {
+					file : data
+				}
+			}
+		}, function(ret, err) {
+			if (ret) {
+				//api.alert({msg : JSON.stringify(ret)});
+				if (ret.status == 1) {
+					callback(ret.path);
+				} else if (ret.status == 0) {
+					alert("上传失败");
+				}
+			} else {
+				api.alert({
+					msg : ('错误码：' + err.code + '；错误信息：' + err.msg + '；网络状态码：' + err.statusCode)
+				});
+			}
+		});
+	}
+
+
+function comListShow() {
+	//var UIListView = api.require('UIListView');
+	UIListView.open({
+		rect : {
+			x : 0,
+			y : 40,
+			w : api.winWidth,
+			h : api.winHeight
+		},
+		data : [],
+		rightBtns : [{
+			bgColor : '#388e8e',
+			activeBgColor : '',
+			width : 70,
+			title : '详情',
+			titleSize : 12,
+			titleColor : '#fff',
+			icon : '',
+			iconWidth : 20
+		},{
+			bgColor : '#388e8e',
+			activeBgColor : '',
+			width : 70,
+			title : '上传',
+			titleSize : 12,
+			titleColor : '#fff',
+			icon : '',
+			iconWidth : 20
+		}],
+		styles : {
+			borderColor : '#696969',
+			item : {
+				bgColor : '#AFEEEE',
+				activeBgColor : '#F5F5F5',
+				height : 55.0,
+				imgWidth : 40,
+				imgHeight : 40,
+				imgCorner : 4,
+				placeholderImg : '',
+				titleSize : 12.0,
+				titleColor : '#000',
+				subTitleSize : 12.0,
+				subTitleColor : '#000',
+				remarkColor : '#000',
+				remarkSize : 16,
+				remarkIconWidth : 30
+			}
+		},
+		fixedOn : api.frameName
+	}, function(ret, err) {
+		if (ret) {
+			//alert(JSON.stringify(ret));
+			switch(ret.btnIndex)
+			{
+				case 0:
+				getImgs(ret.index);
+				break;
+				case 1:
+				picScan(ret.index);
+				//test();
+				break;			
+			}
+		} else {
+			//alert(JSON.stringify(err));
+		}
+	});
+
+}
+
+
+function test() {
+	api.ajax({
+		url : 'http://192.168.2.103:8086/ajax/test.ashx',
+		method : 'post',
+		data : {
+			
+		}
+	}, function(ret, err) {
+		if (ret) {
+			api.alert({
+				msg : JSON.stringify(ret)
+			});
+		} else {
+			api.alert({
+				msg : ('错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err.statusCode)
+			});
+		};
+	});
+	/*
+	api.openWin({
+		name : 'test_win',
+		url : 'http://192.168.2.103:8086/',
+		reload: true,
+		pageParam : {
+			name : urlList
+		}
+	});*/
+}
+
+
+function getUrlData(comId) {
+	var sql = "select * from pic where comId='" + comId + "'";
+	db.selectSql({
+		name : 'app',
+		sql : sql
+	}, function(ret, err) {
+		//alert(JSON.stringify(ret));
+		var rdata = ret.data;
+		urlList = [];
+		//alert("pic:" + rdata.length + ",rdata:" + rdata[0].url);
+		for (var i = 0; i < rdata.length; i++) {
+			//insertToList(rdata[i]);
+			//var url=rdata[i].url;
+			//alert("url"+url);
+			urlList.push(rdata[i].url);
+		}
+		openDetail_win(urlList,comId);
+	});
+}
+
+function getImgs(num){
+	UIListView.getDataByIndex({
+		index : num
+	}, function(ret, err) {
+		if (ret) {
+			//ret.data[0]
+			var comId=ret.data.icon;
+			getUrlData(comId);
+			//alert(JSON.stringify(ret.data.icon));
+		} else {
+			alert(JSON.stringify(err));
+		}
+	});
+}
+function openDetail_win(urlList,comId){
+
+	//alert("comlist,urllist:"+JSON.stringify(urlList));
+	api.openWin({
+		name : 'comDetail_win',
+		url : 'comDetail_win.html',
+		reload: true,
+		pageParam : {
+			urlList : urlList,
+			comId:comId
+		}
+	});
+}

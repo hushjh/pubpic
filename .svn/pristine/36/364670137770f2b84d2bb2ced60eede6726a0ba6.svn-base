@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <style>
+    	html,body{
+    		
+    	}
+    	div{
+    		width:150px;
+    		height:100px;
+    		line-height:100px;
+    		text-align:center;
+    		font-size:20px;
+    		color:#55ABCE;
+    	}
+    </style>
+</head>
+<body>
+	<div>保存成功！</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+	apiready = function(){
+		setTimeout(closefrm,2000);
+	};
+	function closefrm(){
+		api.closeFrame({
+		    name: 'alert_frm'
+		});
+	}
+</script>
+</html>

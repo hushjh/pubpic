@@ -1,0 +1,65 @@
+apiready = function(){
+		var UIListView = api.require('UIListView');
+		linkershow();
+	};
+	
+function linkershow(){
+	UIListView.open({
+    rect: {
+        x: 0,
+        y: 0,
+        w: 320,
+        h: 480
+    },
+    data: [{
+        uid: '1001',    //开发者自定义的唯一标识
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    },{
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }],
+    rightBtns: [{
+        bgColor: '#388e8e',
+        activeBgColor: '',
+        width: 70,
+        title: '按钮',
+        titleSize: 12,
+        titleColor: '#fff',
+        icon: '',
+        iconWidth: 20
+    }],
+    styles: {
+        borderColor: '#696969',
+        item: {
+            bgColor: '#AFEEEE',
+            activeBgColor: '#F5F5F5',
+            height: 55.0,
+            imgWidth: 40,
+            imgHeight: 40,
+            imgCorner: 4,
+            placeholderImg: '',
+            titleSize: 12.0,
+            titleColor: '#000',
+            subTitleSize: 12.0,
+            subTitleColor: '#000', 
+            remarkColor: '#000',
+            remarkSize: 16,
+            remarkIconWidth: 30
+        }
+    },
+    fixedOn: api.frameName
+	}, function( ret, err ){
+   		if( ret ){
+         	alert( JSON.stringify( ret ) );
+   	 	}else{
+         	alert( JSON.stringify( err ) );
+    	}
+	});
+}

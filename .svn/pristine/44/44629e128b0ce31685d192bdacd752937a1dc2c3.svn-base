@@ -1,0 +1,165 @@
+apiready = function() {
+	actionButton = api.require('actionButton');
+	
+	actBtnOpen();
+	//closeApp_kb();
+	exit_app();
+	alert("main_frm.js");
+}; 
+
+
+
+function exit_app() {
+	api.addEventListener({
+		name : 'keyback'
+	}, function(ret, err) {
+		api.toast({
+			msg : '再按一次返回键退出' + api.appName,
+			duration : 2000,
+			location : 'bottom'
+		});
+		api.addEventListener({
+			name : 'keyback'
+		}, function(ret, err) {
+			api.closeWidget({
+				id : 'A6907697189627', //你的APPid
+				retData : {
+					name : 'closeWidget'
+				},
+				animation : {
+					type : 'flip',
+					subType : 'from_bottom',
+					duration : 500
+				},
+				silent : true
+			});
+		});
+		setTimeout(function() {
+			exit_app();
+		}, 3000);
+	});
+}
+
+
+
+
+
+
+
+
+
+function actBtnOpen() {
+	alert("actBtnopne");
+	actionButton.open({
+		items : [{
+			bgColor : '#00CED1',
+			title : '联系人',
+			image : 'widget://res/actionSheet_icon1.png'
+		}, {
+			bgColor : '#FFC0CB',
+			title : '发布信息',
+			image : 'widget://res/actionSheet_icon2.png'
+		}, {
+			bgColor : '#DB7093',
+			title : '查看公司',
+			image : 'widget://res/actionSheet_icon3.png'
+		}, {
+			bgColor : '#FF00FF',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon4.png'
+		}, {
+			bgColor : '#A52A2A',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon5.png'
+		}, {
+			bgColor : '#A0522D',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon6.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}],
+		topHeight : 200,
+		pageControl : {
+			activeColor : '#778899',
+			inactiveColor : '#DDA0DD'
+		}
+	}, function(ret, err) {
+		//api.alert({
+			//msg : ret.index
+		//});
+		switch(ret.index){
+			case 0:
+			openfrmLinker_win();
+			break;
+			case 1:
+			openfrmPubpic_win();
+			break;
+			case 2:
+			openComLIst_win();
+			break;
+			
+		}
+	});
+}
+
+function openComLIst_win(){
+	api.openWin({
+		name : 'comList_win',
+		url : 'comList_win.html',
+		pageParam : {
+			name : 'test'
+		}
+	});
+}
+
+function openfrmLinker_win() {
+	api.openWin({
+		name : 'linker_win',
+		url : 'linker_win.html',
+		pageParam : {
+			name : 'test'
+		}
+	});
+	
+}
+
+
+function openfrmPubpic_win(){
+	api.openWin({
+		name : 'pubpic_win',
+		url : 'pubpic_win.html',
+		pageParam : {
+			name : 'test'
+		}
+	});
+}
+
+
+
+

@@ -1,0 +1,14 @@
+apiready = function() {
+	
+	openUserLogin();
+}; 
+
+function openUserLogin(){
+	api.openWin({
+        name: 'userLogin',
+        url: 'html/userLogin.html',
+        opaque: true,
+        vScrollBarEnabled: false
+    });
+}
+

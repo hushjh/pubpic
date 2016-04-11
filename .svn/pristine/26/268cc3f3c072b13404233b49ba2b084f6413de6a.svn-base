@@ -1,0 +1,282 @@
+var upurl1 = 'http://218.93.25.58:8086/ajax/';
+var upurl2 = 'http://192.168.2.104:8086/ajax/';
+var  addr="定位中...";
+var lon='119.952100';
+var lat='31.820300';
+apiready = function() {
+	push = api.require('push');
+	bMap = api.require('bMap');
+	db = api.require('db');
+	openUserLogin();
+	createTable();
+	setSeverUrl();
+/*
+	api.removeLaunchView({
+		animation : {
+			type : 'fade',
+			duration : 1
+		}
+	});
+*/
+	locationBk();
+	//t();
+	//gotoBk();
+	pushN();
+	pushListener();
+};
+
+
+function pushListener() {
+	push.setListener(function(ret, err) {
+		if (ret) {
+			api.alert({
+				msg : ret.data
+			});
+		}
+	});
+}
+
+function pushN() {
+	push.setPreference({
+		notify : true,
+		updateCurrent : false,
+		silenceTime : {//晚上10点30到第二天上午9点之间静默
+			startHour : 22,
+			endHour : 9,
+			startMinute : 30,
+			endMinute : 0
+		},
+		defaults : 'all'
+	});
+}
+
+function gotoBk() {
+	api.addEventListener({
+		name : 'pause'
+	}, function(ret, err) {
+		//alert("gotobk");
+		//api.toLauncher();
+		locationBk();
+	});
+}
+
+function getAddr() {
+	bMap.getLocation({
+		accuracy : '10m',
+		autoStop : true,
+		filter : 1
+	}, function(ret, err) {
+		if (ret.status) {
+			//$(".ll").text(ret.lon+","+ret.lat);
+			bMap.getNameFromCoords({
+				lon : ret.lon,
+				lat : ret.lat
+			}, function(ret, err) {
+				if (ret.status) {
+					// 设置给位置
+					//$(".po").text(ret.address);
+					//$("#city").text(ret.city);
+					addr=ret.address;
+				}
+			});
+		} else {
+			alert("无法获取当前位置:"+err.code);
+		}
+	});
+}
+
+
+
+function locationBk() {
+	api.startLocation({
+		accuracy : '10m',
+		filter : 1,
+		autoStop : false
+	}, function(ret, err) {
+		//alert(1)
+		if (ret.status) {
+			//var lat = ret.latitude;
+			//var lon = ret.longitude;
+			//var time = ret.timestamp;
+			//var str = '经度：' + lon + '\n';
+			//str += '纬度：' + lat + '\n';
+			//str += '更新时间：' + time;
+			// api.alert({msg:str});
+			//$("#textmian").html(str)
+			//$api.html($api.byId('textmian'),str);
+			//alert(str);
+			 //addr="定位中...";
+			 /*
+			bMap.getNameFromCoords({
+				lon : lon,
+				lat : lat
+			}, function(ret, err) {
+				if (ret.status) {
+					// 设置给位置
+					//$(".po").text(ret.address);
+					//$("#city").text(ret.city);
+					addr=ret.address;
+					//alert(addr);
+				}
+			});
+			*/
+			getAddr();
+			//alert(addr);
+			var userName='';
+			var timestamp=getNowFormatDate();
+			//var timestamp="20160219";
+			var userinfo = $api.getStorage('user');
+			//alert(JSON.stringify(userinfo));
+			
+			if(typeof(userinfo) =="undefined")
+			{
+				//alert(typeof(userinfo));
+				//return;
+			}
+			else
+			{
+				var userName=userinfo.userName;	
+			}
+			
+			//var sevUrl = $api.getStorage('sevUrl');
+			var upurl=upurl1+"userPosition.ashx";
+			//alert(upurl);
+			api.ajax({
+				url : upurl,
+				method : 'post',
+				timeout : 30,
+				dataType : 'json',
+				returnAll : false,
+				data : {
+					values : {
+						userName : userName,
+						lat : lat,
+						lon : lon,
+						timestamp : timestamp,
+						addr : addr
+					}
+					//files : {
+					//file : data
+					//}
+				}
+			}, function(ret, err) {
+			//alert(JSON.stringify(ret) + JSON.stringify(err));
+				switch(ret.status) {
+					case 1:
+					//alert("记录成功");
+					break;
+					case 0:
+					alert("记录失败！");
+					break;
+				}
+			});
+			
+			setInterval(locationBk,300000);
+			//setInterval(locationBk,10000);
+		} else {
+			// api.alert({msg:err.msg});
+		}
+	});
+}
+
+// 获取当前的时间，拼接成2015-11-09这样的格式，主要用于对图片进行时间分类
+function getNowFormatDate() {
+	var date = new Date();
+	var seperator1 = "-";
+	var seperator2 = ":";
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var strDate = date.getDate();
+	var hour = date.getHours();
+	var minute = date.getMinutes();
+	var second = date.getSeconds();
+	if (month >= 1 && month <= 9) {
+		month = "0" + month;
+	}
+	if (strDate >= 0 && strDate <= 9) {
+		strDate = "0" + strDate;
+	}
+	if (hour >= 1 && hour <= 9) {
+		hour = "0" + hour;
+	}
+	if (minute >= 0 && minute <= 9) {
+		minute = "0" + minute;
+	}
+	if (second >= 0 && second <= 9) {
+		second = "0" + second;
+	}
+	var currentdate = year + seperator1 + month + seperator1 + strDate+"/"+hour+seperator2+minute+seperator2+second;
+	return currentdate;
+}
+
+function setSeverUrl(){
+	var key = 'sevUrl';
+	var sevUrl = {};
+	//sevUrl.url = 'http://218.93.25.58:8086/ajax/userLogin.ashx';
+	sevUrl.url=upurl2;
+	
+	$api.setStorage(key, sevUrl);
+	//var sevUrl = $api.getStorage('sevUrl');
+	//alert("sevUrl:"+JSON.stringify(sevUrl));
+	//alert("sevUrl:"+sevUrl.url);
+}
+
+
+
+function openUserLogin(){
+	api.openWin({
+        name: 'userLogin_win',
+        url: 'html/userLogin.html',
+        opaque: true,
+        vScrollBarEnabled: false
+    });
+}
+
+function createTable() {
+	db.openDatabase({
+		name : 'app'
+	}, function(ret, err) {
+		if (ret.status) {
+			//api.alert({
+				//msg : '数据库打开成功'
+			//});
+			// 创建表（先判断是否存在）
+			var sql1 = 'create table if not exists pic(picId int IDENTITY(1,1) PRIMARY KEY, comId nvarchar(50),picName nvarchar(50),url nvarchar(50),createAt nvarchar(50))';
+			var sql2 ='create table if not exists company(id int IDENTITY(1,1) PRIMARY KEY, comId nvarchar(50),comName nvarchar(50),address nvarchar(50),city nvarchar(50),tel nvarchar(50),comLinker nvarchar(50),comment nvarchar(50),linePrice nvarchar(50),zbr nvarchar(50),createAt nvarchar(50))';
+			db.executeSql({
+				name : 'app',
+				sql : sql2
+			}, function(ret, err) {
+				if (ret.status) {
+					//api.alert({
+						//msg : '创建company表成功'
+					//});
+				} else {
+					api.alert({
+						msg : err.msg
+					});
+				}
+			});
+			db.executeSql({
+				name : 'app',
+				sql : sql1
+			}, function(ret, err) {
+				if (ret.status) {
+					//api.alert({
+						//msg : '创建pic表成功'
+					//});
+					//test();
+					
+				} else {
+					api.alert({
+						msg : err.msg
+					});
+				}
+			});
+		} else {
+			api.alert({
+				msg : err.msg
+			});
+		}
+	});
+}

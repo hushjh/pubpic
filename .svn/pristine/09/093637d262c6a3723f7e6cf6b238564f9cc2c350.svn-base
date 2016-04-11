@@ -1,0 +1,83 @@
+
+
+
+apiready = function() {
+	db = api.require('db');
+	openUserLogin();
+	createTable();
+
+	
+		api.removeLaunchView({
+			animation : {
+				type : 'fade',
+				duration : 10
+			}
+		});
+	
+
+	
+            
+
+}; 
+
+
+
+
+
+function openUserLogin(){
+	api.openWin({
+        name: 'main_win',
+        url: 'html/main_win.html',
+        opaque: true,
+        vScrollBarEnabled: false
+    });
+}
+
+function createTable() {
+	db.openDatabase({
+		name : 'app'
+	}, function(ret, err) {
+		if (ret.status) {
+			//api.alert({
+				//msg : '数据库打开成功'
+			//});
+			// 创建表（先判断是否存在）
+			var sql1 = 'create table if not exists pic(picId int IDENTITY(1,1) PRIMARY KEY, comId nvarchar(50),picName nvarchar(50),url nvarchar(50),createAt nvarchar(50))';
+			var sql2 ='create table if not exists company(id int IDENTITY(1,1) PRIMARY KEY, comId nvarchar(50),comName nvarchar(50),address nvarchar(50),city nvarchar(50),tel nvarchar(50),comLinker nvarchar(50),comment nvarchar(50),linePrice nvarchar(50))';
+			db.executeSql({
+				name : 'app',
+				sql : sql2
+			}, function(ret, err) {
+				if (ret.status) {
+					//api.alert({
+						//msg : '创建company表成功'
+					//});
+				} else {
+					api.alert({
+						msg : err.msg
+					});
+				}
+			});
+			db.executeSql({
+				name : 'app',
+				sql : sql1
+			}, function(ret, err) {
+				if (ret.status) {
+					//api.alert({
+						//msg : '创建pic表成功'
+					//});
+					//test();
+					
+				} else {
+					api.alert({
+						msg : err.msg
+					});
+				}
+			});
+		} else {
+			api.alert({
+				msg : err.msg
+			});
+		}
+	});
+}

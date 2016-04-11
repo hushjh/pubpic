@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+    	body{
+    		
+    	}
+    </style>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript">
+	//var lat;
+	//var lon;
+	var sevUrl = $api.getStorage('sevUrl');
+	apiready = function(){
+		map= api.require('bMap');
+		open();
+		
+	};
+	
+	function open(){
+			map.open({
+			rect: {
+				x: 0,
+				y: 0,
+				w: 'auto',
+				h: 'auto'
+				},
+		/*center: {
+		lon: lon,
+		lat: lat
+		},*/
+			zoomLevel: 17,
+			showUserLocation: false,
+			fixedOn: 'bmapRoute_frm',
+			fixed: true
+			}, 
+			function(ret){
+				if(ret){
+		//获取位置坐标
+
+			getLocation();
+			}
+			}
+			);
+			}
+			
+	function getLocation(){
+	
+		map.getLocation({
+			accuracy : '10m',
+			autoStop : true,
+			filter : 1
+		}, function(ret, err) {
+			api.hideProgress();
+			if (ret.status) {
+				lat = ret.lat;
+				lon = ret.lon;
+				//设置地图中心
+				map.setCenter({
+					coords : {
+						lon : lon,
+						lat : lat
+					},
+					animation : true
+				});
+			}
+		});
+		
+		var upurl=sevUrl.url+"coordRoute.ashx";
+		api.ajax({
+				url : upurl,
+				method : 'post',
+				timeout : 30,
+				dataType : 'json',
+				returnAll : false,
+				data : {
+					values : {
+						userName:"wsz",
+						topnum:5
+					}
+					//files : {
+					//file : data
+					//}
+				}
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + JSON.stringify(err));
+				var points ={};
+				points=ret.cr;
+				alert("points"+JSON.stringify(points));
+				
+				switch(ret.status) {
+					case 1:
+						//alert("记录成功");
+						//alert("记录成功,停止定位");
+						//api.stopLocation();
+						
+						map.addLine({
+						    id: 1,
+						    styles: {
+						        borderColor: '#FF0000',
+						        borderWidth: 3
+						     },
+						     points: points
+						});
+						
+						break;
+					case 0:
+						 alert(ret.userscoord);
+						break;
+				}
+			});
+	}
+	
+	function getLocation1() {
+	
+		map.setCenter({
+			coords : {
+				lon : 116.39432327,
+				lat : 39.98963192
+			},
+			animation : true
+		});
+		map.addLine({
+		    id: 1,
+		    styles: {
+		        borderColor: '#FF0000',
+		        borderWidth: 3
+		     },
+		     points: [{
+		         lon:116.39432327,
+		         lat:39.98963192
+		     },{
+		         lon: 116.49432328,
+		         lat: 39.98963192
+		     },{
+		         lon: 116.39432327,
+		         lat: 39.88933191
+		     }]
+		});
+		
+		
+		
+		
+		/*
+		 * 
+		 map.getLocation({
+			accuracy : '10m',
+			autoStop : true,
+			filter : 1
+		}, function(ret, err) {
+			api.hideProgress();
+			if (ret.status) {
+				lat = ret.lat;
+				lon = ret.lon;
+				//设置地图中心
+				map.setCenter({
+					coords : {
+						lon : lon,
+						lat : lat
+					},
+					animation : true
+				});
+				//alert (lat);
+				
+			}
+			
+			
+		});
+		 api.openFrame({
+		 name:'bmap_mark_frm',
+		 url:'bmap_mark_frm.html',
+		 rect:{
+		 x:api.frameWidth/2-20,
+		 y:api.frameHeight/2,
+		 w:40,
+		 h:40
+		 },
+		 bounces:false,
+		 vScrollBarEnabled:false,
+		 hScrollBarEnabled:false
+		 });
+		 */
+	}
+	
+</script>
+</html>

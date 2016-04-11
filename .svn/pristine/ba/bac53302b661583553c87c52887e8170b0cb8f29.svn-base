@@ -1,0 +1,213 @@
+apiready = function(){
+	
+	client = new Resource("A6907697189627", "5544860C-3918-E329-6338-67772D0CD2B5");
+	client.setHeaders("authorization",$api.getStorage('token'));
+	bMap=api.require('bMap');		
+	actionButton = api.require('actionButton');	
+	actBtnOpen();
+	//openMain_frm();
+	exit_app();
+	
+	//tolaunch();
+	//console();
+};
+
+
+
+
+/*
+function tolaunch() {
+
+	api.addEventListener({
+		name : 'keyback'
+	}, function(ret, err) {
+		//operation
+		api.toLauncher();
+		alert("tolauncher");
+	});
+	
+}*/
+
+/*
+function console() {
+	api.addEventListener({
+		name : 'pause'
+	}, function(ret, err) {
+		//operation
+		setInterval(show1,1000);
+	});
+}
+
+function show1(){
+	alert("houtai  zhixing");
+}
+
+*/
+
+
+function exit_app() {
+	api.addEventListener({
+		name : 'keyback'
+	}, function(ret, err) {
+		api.toast({
+			msg : '再按一次返回键退出' + api.appName,
+			duration : 2000,
+			location : 'bottom'
+		});
+		api.addEventListener({
+			name : 'keyback'
+		}, function(ret, err) {
+			api.closeWidget({
+				id : 'A6907697189627', //你的APPid
+				retData : {
+					name : 'closeWidget'
+				},
+				animation : {
+					type : 'flip',
+					subType : 'from_bottom',
+					duration : 500
+				},
+				silent : true
+			});
+		});
+		setTimeout(function() {
+			exit_app();
+		}, 3000);
+	});
+}
+
+function actBtnOpen() {
+
+	actionButton.open({
+		items : [{
+			bgColor : '#00CED1',
+			title : '联系人',
+			image : 'widget://res/actionSheet_icon1.png'
+		}, {
+			bgColor : '#FFC0CB',
+			title : '采集信息',
+			image : 'widget://res/actionSheet_icon2.png'
+		}, {
+			bgColor : '#DB7093',
+			title : '查看公司',
+			image : 'widget://res/actionSheet_icon3.png'
+		}, {
+			bgColor : '#FF00FF',
+			title : '我',
+			image : 'widget://res/actionSheet_icon4.png'
+		}, {
+			bgColor : '#A52A2A',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon5.png'
+		}, {
+			bgColor : '#A0522D',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon6.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}, {
+			bgColor : '#7FFF00',
+			title : '子标题',
+			image : 'widget://res/actionSheet_icon7.png'
+		}],
+		topHeight : 200,
+		//fixedOn:'main_win',
+		pageControl : {
+			activeColor : '#778899',
+			inactiveColor : '#DDA0DD'
+		}
+	}, function(ret, err) {
+		//api.alert({
+			//msg : ret.index
+		//});
+		switch(ret.index){
+			case 0:
+			openfrmLinker_win();
+			//api.closeWin();
+			break;
+			case 1:
+			openfrmPubpic_win();
+			//api.closeWin();
+			break;
+			case 2:
+			openComLIst_win();
+			break;
+			case 3:
+			openOneself_win();
+			break;
+			
+		}
+	});
+}
+
+function openOneself_win(){
+	
+	api.openWin({
+		name : 'Oneself_win',
+		url : 'Oneself_win.html',
+		reload :true,//刷新页面
+		pageParam : {
+			name : 'test'
+		}
+	});
+}
+
+function openComLIst_win(){
+	api.openWin({
+		name : 'comList_win',
+		url : 'comList_win.html',
+		reload :true,//刷新页面
+		pageParam : {
+			name : 'test'
+		}
+	});
+	//api.closeWin();
+}
+
+function openfrmLinker_win() {
+	api.openWin({
+		name : 'linker_win',
+		url : 'linker_win.html',
+		reload :true,//刷新页面
+		pageParam : {
+			name : 'test'
+		}
+	});
+	//api.closeWin();
+}
+
+
+function openfrmPubpic_win(){
+	api.openWin({
+		name : 'pubpic_win',
+		url : 'pubpic_win.html',
+		reload :true,//刷新页面
+		pageParam : {
+			name : 'test'
+		}
+	});
+	//api.closeWin();
+}
+

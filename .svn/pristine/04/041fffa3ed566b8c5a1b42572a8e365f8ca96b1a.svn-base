@@ -1,0 +1,126 @@
+
+apiready = function(){
+	db = api.require('db');
+	UIScrollPicture = api.require('UIScrollPicture');
+	
+	keyBack();
+	$("#back").click(back);	
+	paths=api.pageParam.urlList;
+	comId=api.pageParam.comId;
+	//alert("api.pageParam: paths"+JSON.stringify(paths));
+	//alert("api.pageParam comId:"+JSON.stringify(comId));
+	scrollPic();
+	getComData();
+};
+
+function keyBack() {
+	//alert("keyBcak  function");
+	api.addEventListener({
+		name : 'keyback'
+	}, function(ret, err) {
+		//alert("aip.openWin");
+		//api.closeWin();
+		api.openWin({
+		name : 'comList_win',
+		url : 'comList_win.html',
+		reload: true,
+		pageParam : {
+			name : 'test'
+		}
+	});
+	});
+	
+}
+function back() {
+
+	api.openWin({
+		name : 'comList_win',
+		url : 'comList_win.html',
+		reload : true,
+		pageParam : {
+			name : 'test'
+		}
+	});
+
+}
+
+function getComData(){
+	db.openDatabase({
+		name : 'app'
+	}, function(ret, err) {
+		//coding...
+		if(ret.status){
+			var sql=	"select * from pic where comId='"+comId+"'";
+			db.selectSql({
+				name : 'app',
+				sql : sql
+			}, function(ret, err) {
+				var rdata = ret.data;
+				//alert("company:" + rdata.length + ",comId:" + rdata[0].comId);
+				$("#createAt").val(rdata[0].createAt);
+				$("#comment").val(rdata[0].comment);
+			});
+		}
+		if (ret.status) {
+			var sql = "select * from company where comId='"+comId+"'";
+			db.selectSql({
+				name : 'app',
+				sql : sql
+			}, function(ret, err) {
+				var rdata = ret.data;
+				//alert("company:" + rdata.length + ",comId:" + rdata[0].comId);
+				$("#comName").val(rdata[0].comName);
+				$("#address").val(rdata[0].address);
+
+			});
+		}
+	});
+}
+
+function scrollPic() {
+	//var urlList=[];
+	//var paths=new Array();
+	//for(var i=0;i<urlList.length;i++){
+		//paths.push(urlList[i]);
+	//}
+	//alert("paths:"+paths);
+	UIScrollPicture.open({
+		rect : {
+			x : 0,
+			y : 45,
+			w : api.winWidth,
+			h : 300
+		},
+		//data : {
+			//paths : ['widget://res/img/ic/slide1.jpg', 'widget://res/img/ic/slide2.jpg', 'widget://res/img/ic/slide5.jpg', 'widget://res/img/ic/slide3.jpg', 'widget://res/img/ic/slide4.jpg'],
+			//captions : ['title1', 'title2', 'title3', 'title4', 'title5']
+		//},
+		data:{
+			paths:paths,
+			//captions:['title1','title2']
+		},
+		styles : {
+			//caption : {
+				
+			//},
+			indicator : {
+				align : 'center',
+				color : '#FFFFFF',
+				activeColor : '#DA70D6'
+			}
+		},
+		placeholderImg : 'widget://res/slide1.jpg',
+		contentMode : 'scaleToFill',
+		interval : 3,
+		loop : true,
+		fixedOn : api.frameName,
+		fixed : false
+	}, function(ret, err) {
+		if (ret) {
+			//alert(JSON.stringify(ret));
+		} else {
+			alert(JSON.stringify(err));
+		}
+	});
+
+}

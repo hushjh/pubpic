@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css"/>
+    <style>
+    	body{
+    		
+    	}
+    </style>
+</head>
+<body>
+	<div class="aui-form">
+    <div class="aui-input-row">
+        <label class="aui-input-addon">用户名</label>
+        <input type="text" class="aui-input" placeholder="用户名" id="un"/>
+    </div>
+    
+    <div class="aui-input-row">
+        <span class="aui-input-addon">记录数</span>
+        <input type="number" class="aui-input" placeholder="记录数" id="recNum"/>
+    </div>
+    
+    <div class="aui-btn-row">
+        <div class="aui-btn aui-btn-success" onclick="ensure()">确认
+        </div>&nbsp;&nbsp;
+        <div class="aui-btn aui-btn-warning" onclick="cancel()">取消</div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript">
+var userName;
+var recNum;
+	apiready = function(){
+		
+		 
+	};
+	
+	function ensure(){
+		var name=$api.byId('un');
+		var rec=$api.byId('recNum');
+		 userName=$api.val(name);
+		 recNum=$api.val(rec);
+		var str='query("'+userName+'","'+recNum+'");'
+		api.execScript({
+		    frameName: 'bmapRoute_frm',
+		    script: str
+		});
+		api.closeFrame({name: 'routeQuery_frm'});
+	}
+	function cancel(){
+		api.closeFrame({name: 'routeQuery_frm'});
+	}
+</script>
+</html>

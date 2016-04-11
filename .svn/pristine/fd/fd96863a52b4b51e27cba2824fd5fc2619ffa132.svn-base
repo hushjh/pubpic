@@ -1,0 +1,120 @@
+function delWord(el) {
+    var input = $api.prev(el, '.txt');
+    input.value = '';
+}
+
+function reg() {
+    api.openWin({
+        name: 'userRegister',
+        url: 'userRegister.html',
+        opaque: true,
+        vScrollBarEnabled: false
+    });
+}
+
+/*
+function ensure() {
+	api.showProgress({
+		title : '正在登录...',
+		modal : false
+	});
+	var name = $api.byId('username').value;
+	var pwd = $api.byId('password').value;
+
+	var bodyParam = {
+		username : name,
+		password : pwd
+	}
+	var User = factory("user");
+	User.login(bodyParam, function(ret, err) {
+		if (ret) {
+			$api.setStorage('uid', ret.userId);
+			$api.setStorage('token', ret.id);
+			//setTimeout(function() {
+				//api.closeWin();
+			//}, 100);
+			api.openWin({
+				name : 'main_win',
+				url : 'main_win.html',
+				pageParam : {
+					name : 'test'
+				}
+			});
+		} else {
+			api.alert({
+				msg : err.msg
+			});
+		}
+		api.hideProgress();
+	})
+}
+*/
+
+
+
+function ensure() {
+	api.showProgress({
+		title : '正在登录...',
+		modal : false
+	});
+	var name = $api.byId('username').value;
+	var pwd = $api.byId('password').value;
+	var UserInfo = client.Factory("userInfo");
+	UserInfo.query({
+		"filter" : {
+			"where" : {
+				"name" : name,
+				"pwd" : pwd
+			},
+
+		}
+	}, function(ret, err) {
+		//return body
+		//alert("ret: " + JSON.stringify(ret) + "\nerr: " + JSON.stringify(err));
+		//alert(ret.length);
+		
+		if (ret.length==1) {
+		
+			var key = 'user';
+			var user = {};
+			user.id=ret[0].id;
+			user.name = ret[0].name;
+			$api.setStorage(key, user);
+			var userinfo = $api.getStorage('user');
+			//alert("userinfo:"+JSON.stringify(userinfo));
+			setTimeout(function() {
+				api.closeWin();
+			}, 100);
+			api.openWin({
+				name : 'main_win',
+				url : 'main_win.html',
+				pageParam : {
+					name : 'test'
+				}
+			});
+		}else{
+			alert("用户名或密码错误！");
+		}
+	api.hideProgress();
+	})
+}
+
+
+
+
+
+
+
+
+apiready = function() {
+	var header = $api.byId('header');
+    $api.fixIos7Bar(header);
+
+	bMap=api.require('bMap');
+	UIListView = api.require('UIListView');
+	
+	client = new Resource("A6907697189627", "5544860C-3918-E329-6338-67772D0CD2B5");
+	client.setHeaders("authorization",$api.getStorage('token'));
+
+	
+}; 
